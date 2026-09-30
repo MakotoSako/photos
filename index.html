@@ -3,82 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Photo Archive</title>
+  <title>写真表示</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #121212;
-      color: #ffffff;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      font-family: sans-serif;
+      text-align: center;
       padding: 20px;
     }
-    .card {
-      max-width: 600px;
-      width: 100%;
-      background: #1e1e1e;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-      text-align: center;
-    }
-    .img-container {
-      width: 100%;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .photo-container {
+      margin-top: 20px;
     }
     img {
       max-width: 100%;
-      max-height: 70vh;
       height: auto;
-      display: block;
-    }
-    .caption {
-      padding: 16px;
-      font-size: 0.95rem;
-      color: #aaa;
-    }
-    .error {
-      padding: 40px;
-      color: #ff6b6b;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
 
-  <div class="card" id="app">
-    <div class="caption">読み込み中...</div>
+  <h1>写真詳細</h1>
+
+  <div class="photo-container">
+    <!-- 写真を表示するimgタグ（IDを付与） -->
+    <img id="photo" src="" alt="写真">
   </div>
 
   <script>
-    // URLから "id" パラメータを取得 (例: ?id=001)
-    const params = new URLSearchParams(window.location.search);
-    const photoId = params.get('id');
-    const app = document.getElementById('app');
+    // 1. URLのパラメーター(?id=xxx)を取得
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // 2. idパラメータを取得。指定がない場合はデフォルトで '001' を使う
+    const photoId = urlParams.get('id') || '001';
 
-    if (photoId) {
-      // images フォルダ内の画像パス（拡張子は jpg を想定）
-      const imagePath = `./images/${photoId}.jpg`;
+    // 3. images フォルダ内の画像を読み込むパスを作成
+    // ※ 拡張子が .JPG（大文字）の場合は '.JPG' に変更してください
+    const imagePath = `images/${photoId}.jpg`;
 
-      app.innerHTML = `
-        <div class="img-container">
-          <img src="${imagePath}" alt="Photo ${photoId}" onerror="showError()">
-        </div>
-        <div class="caption">Photo ID: ${photoId}</div>
-      `;
-    } else {
-      showError('写真IDが指定されていません。');
-    }
-
-    function showError(msg = '指定された写真が見つかりません。') {
-      app.innerHTML = `<div class="error">${msg}</div>`;
+    // 4. <img> タグの src にパスをセットして表示
+    const imgElement = document.getElementById('photo');
+    if (imgElement) {
+      imgElement.src = imagePath;
     }
   </script>
+
 </body>
 </html>
