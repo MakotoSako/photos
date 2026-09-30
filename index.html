@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Archive</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .card {
+      max-width: 600px;
+      width: 100%;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+    .img-container {
+      width: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    img {
+      max-width: 100%;
+      max-height: 70vh;
+      height: auto;
+      display: block;
+    }
+    .caption {
+      padding: 16px;
+      font-size: 0.95rem;
+      color: #aaa;
+    }
+    .error {
+      padding: 40px;
+      color: #ff6b6b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="app">
+    <div class="caption">読み込み中...</div>
+  </div>
+
+  <script>
+    // URLから "id" パラメータを取得 (例: ?id=001)
+    const params = new URLSearchParams(window.location.search);
+    const photoId = params.get('id');
+    const app = document.getElementById('app');
+
+    if (photoId) {
+      // images フォルダ内の画像パス（拡張子は jpg を想定）
+      const imagePath = `./images/${photoId}.jpg`;
+
+      app.innerHTML = `
+        <div class="img-container">
+          <img src="${imagePath}" alt="Photo ${photoId}" onerror="showError()">
+        </div>
+        <div class="caption">Photo ID: ${photoId}</div>
+      `;
+    } else {
+      showError('写真IDが指定されていません。');
+    }
+
+    function showError(msg = '指定された写真が見つかりません。') {
+      app.innerHTML = `<div class="error">${msg}</div>`;
+    }
+  </script>
+</body>
+</html>
